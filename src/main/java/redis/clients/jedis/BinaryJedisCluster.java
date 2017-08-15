@@ -75,6 +75,10 @@ public class BinaryJedisCluster implements BinaryJedisClusterCommands,
     return connectionHandler.getNodes();
   }
 
+  public Jedis getConnectionFromSlot(int slot) {
+	  return  this.connectionHandler.getConnectionFromSlot(slot);
+  }
+
   @Override
   public String set(final byte[] key, final byte[] value) {
     return new JedisClusterCommand<String>(connectionHandler, maxAttempts) {
@@ -1270,11 +1274,11 @@ public class BinaryJedisCluster implements BinaryJedisClusterCommands,
   }
 
   @Override
-  public Object evalsha(final byte[] script, byte[] key) {
+  public Object evalsha(final byte[] sha1, byte[] key) {
     return new JedisClusterCommand<Object>(connectionHandler, maxAttempts) {
       @Override
       public Object execute(Jedis connection) {
-        return connection.evalsha(script);
+        return connection.evalsha(sha1);
       }
     }.runBinary(key);
   }
